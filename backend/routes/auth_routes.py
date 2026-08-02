@@ -7,7 +7,7 @@ auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
-    data = request.get_json()
+    data = request.get_json(silent=True, force=True) or request.form or {}
     email = data.get('email')
     password = data.get('password')
 
@@ -25,7 +25,7 @@ def login():
 
 @auth_bp.route('/signup', methods=['POST'])
 def signup():
-    data = request.get_json()
+    data = request.get_json(silent=True, force=True) or request.form or {}
     vendor_code = data.get('vendor_code')
     full_name = data.get('full_name')
     email = data.get('email')
