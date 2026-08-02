@@ -1,0 +1,62 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter 3.22
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.3'
+          channel: 'stable'
+
+      - name: Get Flutter Dependencies
+        working-directory: mobile-app
+        run: flutter pub get
+
+      - name: Build Android Release APK
+        working-directory: mobile-app
+        run: flutter build apk --release --no-tree-shake-icons
+
+      - name: Rename APK
+        run: |
+          mkdir -p artifacts
+          cp mobile-app/build/app/outputs/flutter-apk/app-release.apk artifacts/videoplatformfinal-android.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: "Video Platform Final v${{ github.run_number }}"
+          body: |
+            ## 📱 Video Platform Final — Android APK
+            **API Endpoint**: http://elevateiq-softtech.com/videoplatformfinal
+            **Build**: #${{ github.run_number }}
+            **Commit**: ${{ github.sha }}
+
+            ### Test Credentials
+            - Admin: admin@gmail.com / admin123
+            - Vendor: vendor@gmail.com / vendor123
+            - Candidate: candidate@gmail.com / candidate123
+            - QC Team: qcteam@gmail.com / qcteam123
+          files: artifacts/videoplatformfinal-android.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

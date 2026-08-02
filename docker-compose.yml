@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: videoplatformfinal_backend
+    restart: unless-stopped
+    environment:
+      FLASK_ENV: production
+      DATABASE_URL: ${DATABASE_URL:-postgresql://neondb_owner:npg_FBwOPsI5L4fE@ep-young-leaf-axv340na-pooler.c-4.us-east-2.aws.neon.tech/neondb?sslmode=require}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-super_secret_jwt_flask_key_2026_videoplatformfinal}
+      JWT_ACCESS_TOKEN_EXPIRES: ${JWT_ACCESS_TOKEN_EXPIRES:-28800}
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      UPLOAD_FOLDER: uploads/videos
+      PORT: 5001
+    ports:
+      - "5001:5001"
+    volumes:
+      - video_uploads:/app/uploads
+    networks:
+      - backend_net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  video_uploads:
+    driver: local
+
+networks:
+  backend_net:
+    driver: bridge
