@@ -16,8 +16,15 @@ class AuthService {
       final role = data['data']['role'];
       await saveSession(token, '', role, data['data']['name'] ?? '', email, data['data']['user_id'] ?? '');
       return data['data'];
+    } else {
+      try {
+        final data = jsonDecode(response.body);
+        throw Exception(data['message'] ?? 'Login failed (${response.statusCode})');
+      } catch (e) {
+        if (e is Exception) rethrow;
+        throw Exception('Login failed (${response.statusCode})');
+      }
     }
-    throw Exception('Login failed');
   }
 
   static Future<void> signup(String email, String password, String fullName, String vendorCode) async {
