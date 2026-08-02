@@ -15,21 +15,27 @@ class AuthService:
 
     @staticmethod
     def generate_tokens(user_id, email, role, name, extra=None):
-        identity = {
-            'id': user_id,
+        claims = {
+            'user_id': str(user_id),
             'email': email,
             'role': role,
             'name': name
         }
         if extra:
-            identity.update(extra)
+            claims.update(extra)
         
-        access_token = create_access_token(identity=identity)
-        refresh_token = create_refresh_token(identity=identity)
+        # identity must be a string in Flask-JWT-Extended 4.x
+        access_token = create_access_token(identity=str(user_id), additional_claims=claims)
+        refresh_token = create_refresh_token(identity=str(user_id), additional_claims=claims)
         
         return {
             'access_token': access_token,
-            'refresh_token': refresh_token
+            'refresh_token': refresh_token,
+            'user_id': str(user_id),
+            'email': email,
+            'role': role,
+            'name': name,
+            **(extra or {})
         }
 
     @staticmethod
