@@ -44,11 +44,11 @@ cd /var/www/videoplatformfinal
 
 | Property | Value |
 |----------|-------|
-| **Host** | `ep-young-leaf-axv340na-pooler.c-4.us-east-2.aws.neon.tech` |
+| **Host** | `ep-still-truth-ayf17i6q-pooler.c-5.us-east-2.aws.neon.tech` |
 | **Database** | `neondb` |
 | **User** | `neondb_owner` |
-| **Password** | `npg_FBwOPsI5L4fE` |
-| **Connection String** | `postgresql://neondb_owner:npg_FBwOPsI5L4fE@ep-young-leaf-axv340na-pooler.c-4.us-east-2.aws.neon.tech/neondb?sslmode=require` |
+| **Password** | `npg_xvIdHkz6f2iM` |
+| **Connection String** | `postgresql://neondb_owner:npg_xvIdHkz6f2iM@ep-still-truth-ayf17i6q-pooler.c-5.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require` |
 
 ---
 
