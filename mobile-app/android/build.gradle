@@ -1,0 +1,36 @@
+ext {
+    compileSdkVersion = 34
+    compileSdkVersionString = "34"
+    targetSdkVersion = 34
+    minSdkVersion = 21
+    kotlin_version = '1.9.22'
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    afterEvaluate { project ->
+        if (project.hasProperty("android")) {
+            android {
+                compileSdkVersion 34
+            }
+        }
+    }
+}
+
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
